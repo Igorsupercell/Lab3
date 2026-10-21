@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using static System.Net.Mime.MediaTypeNames;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Lab3
 {
+    [XmlRoot("text")]
     public class Text 
     {
+        [XmlElement("sentence")]
         public List<Sentence> Sentences { get; set; } = new List<Sentence>();
         public Text()
         {
@@ -79,11 +79,12 @@ namespace Lab3
 
             foreach (var sentence in Sentences)
             {
-                var wordsToRemove = sentence.Items.ToList();
+                var wordsToRemove = new List<Token>();
+                
                 foreach (var word in sentence.Items.OfType<Word>())
                 {
-                    if (word.Content.Length == LengthOfWord && (Word.ENGsogl.Contains(word.Content[0]) 
-                        || Word.RUSsogl.Contains(word.Content[0]))) 
+                    if (word.Content.Length == LengthOfWord && (Word.ENGsogl.Contains(char.ToLower(word.Content[0])) 
+                        || Word.RUSsogl.Contains(char.ToLower(word.Content[0])))) 
                      {
                         wordsToRemove.Add(word);
                      }
@@ -129,18 +130,33 @@ namespace Lab3
                     }   
                 foreach (Sentence sentence in Sentences)
                         {
-                            foreach (Token token in sentence.Items)
-                            {
-                                sentence.Items.RemoveAll(token => token is Word word && uniqueStopWords.Contains(word.Content));
-                            }
+                            sentence.Items.RemoveAll(token => token is Word word && uniqueStopWords.Contains(word.Content));
                         }    
                 }
             }                                         
             catch (Exception e) { Console.WriteLine($"Ошибка выполнения: {e}"); }
         }
 
+        public void ExportToXml(string filePath)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(Text));
 
+            // Настройки форматирования (отступы и UTF-8)
+            XmlWriterSettings settings = new XmlWriterSettings
+            {
+                Indent = true,
+                Encoding = System.Text.Encoding.UTF8
+            };
 
+            // Убираем пространства имен xmlns:xsi и xmlns:xsd для получения чистого XML
+            XmlSerializerNamespaces emptyNamespaces = new XmlSerializerNamespaces();
+            emptyNamespaces.Add("", "");
+
+            using (XmlWriter writer = XmlWriter.Create(filePath, settings))
+            {
+                serializer.Serialize(writer, this, emptyNamespaces);
+            }
+        }
 
     }
 }
