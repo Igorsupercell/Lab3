@@ -9,7 +9,9 @@ namespace Lab3
         
         [XmlIgnore]
         public List<Token> Items { get; set; } = new List<Token>();
-        public Sentence(string content) : base(content){}
+
+        [XmlIgnore]
+        public string Content { get; set; }
         public Sentence() : base("") { }
 
         [XmlElement("word")]
@@ -24,7 +26,21 @@ namespace Lab3
                 }
             }
         }
-
+        
+        [XmlElement("punctuation")]
+        
+        public List<string> PunctForXml
+        {
+            get => Items.OfType<Punctuation>().Select(p => p.Content).ToList();
+            set
+            {
+                if (value != null)
+                {
+                    Items = value.Select(p => (Token)new Punctuation(p)).ToList();
+                }
+            }
+        }
+        
         public void Add(Token token)
         {
             Items.Add(token);
@@ -35,7 +51,7 @@ namespace Lab3
             StringBuilder Result=new StringBuilder();
             Token[] Sent=Items.ToArray();
             for(int i=0; i<Sent.Length;i++)
-                if (Sent[i] is Word && i==0) 
+                if (Sent[i] is Word && i>0) 
                 {
                     Result.Append($" {Sent[i]}");
                 }

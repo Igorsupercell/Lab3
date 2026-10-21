@@ -31,7 +31,7 @@ namespace Lab3
 
                     int currentWords = Sentences[j].WordCount;
                     int nextWords = Sentences[j + 1].WordCount; 
-                    if (currentWords > nextWords)
+                    if (currentWords < nextWords)
                     {
                         (Sentences[j],Sentences[j + 1]) = (Sentences[j + 1], Sentences[j]);
                     }
@@ -48,7 +48,7 @@ namespace Lab3
                 {
                     int currentWords = Sentences[j].Length;
                     int nextWords = Sentences[j + 1].Length;
-                    if (currentWords > nextWords)
+                    if (currentWords < nextWords)
                     {
                         (Sentences[j], Sentences[j + 1]) = (Sentences[j + 1], Sentences[j]);
                     }
@@ -141,14 +141,12 @@ namespace Lab3
         {
             XmlSerializer serializer = new XmlSerializer(typeof(Text));
 
-            // Настройки форматирования (отступы и UTF-8)
+            
             XmlWriterSettings settings = new XmlWriterSettings
             {
                 Indent = true,
                 Encoding = System.Text.Encoding.UTF8
             };
-
-            // Убираем пространства имен xmlns:xsi и xmlns:xsd для получения чистого XML
             XmlSerializerNamespaces emptyNamespaces = new XmlSerializerNamespaces();
             emptyNamespaces.Add("", "");
 

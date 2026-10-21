@@ -8,8 +8,9 @@ namespace Lab3
 {
     public abstract class Token
     {
-        [XmlText]
+        //[XmlIgnore]
         public string Content { get; set; }
+
         protected Token() : this("") { }
         public abstract override string ToString();
         protected Token(string content)
