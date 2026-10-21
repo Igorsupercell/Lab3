@@ -1,27 +1,146 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Lab3
 {
     public class Text 
     {
         public List<Sentence> Sentences { get; set; } = new List<Sentence>();
-
+        public Text()
+        {
+            Sentences.Add(new Sentence());
+        } 
         public void Add(Sentence sent) { Sentences.Add(sent); }
 
         public string ToString()
         {
             return string.Join(" ", Sentences.ToArray());
         }
-        public void Output()
-        {   
+
+        public void OutForWordCount()
+        {
+            int n =Sentences.Count;
+            for (int i = 0; i < n-1; i++)
+            {
+                for (int j = 0; j < n-1-i; j++)
+                {
+
+                    int currentWords = Sentences[j].WordCount;
+                    int nextWords = Sentences[j + 1].WordCount; 
+                    if (currentWords > nextWords)
+                    {
+                        (Sentences[j],Sentences[j + 1]) = (Sentences[j + 1], Sentences[j]);
+                    }
+                }
+            }
         }
 
-        public Text()
+        public void OutForSentenceLength()
         {
-            Sentences.Add(new Sentence());
+            int n = Sentences.Count;
+            for (int i = 0; i < n - 1; i++)
+            {
+                for (int j = 0; j < n - 1 - i; j++)
+                {
+                    int currentWords = Sentences[j].Length;
+                    int nextWords = Sentences[j + 1].Length;
+                    if (currentWords > nextWords)
+                    {
+                        (Sentences[j], Sentences[j + 1]) = (Sentences[j + 1], Sentences[j]);
+                    }
+                }
+            }
+            
         }
+
+        public List<string> SenchInQuestionSent( int LengthOfWord) 
+        {
+            HashSet<string> uniqueWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var sentence in Sentences) 
+            {
+                if (sentence.IsQuestion)
+                {
+                    foreach (var word in sentence.Items.OfType<Word>())
+                    {
+                        if (word.Content.Length == LengthOfWord) uniqueWords.Add(word.Content.ToLower());
+                    }
+                }
+            }
+            return uniqueWords.ToList();
+        }
+
+        public void RemoveForLength(int LengthOfWord)
+        {
+
+            foreach (var sentence in Sentences)
+            {
+                var wordsToRemove = sentence.Items.ToList();
+                foreach (var word in sentence.Items.OfType<Word>())
+                {
+                    if (word.Content.Length == LengthOfWord && (Word.ENGsogl.Contains(word.Content[0]) 
+                        || Word.RUSsogl.Contains(word.Content[0]))) 
+                     {
+                        wordsToRemove.Add(word);
+                     }
+                }
+
+                foreach(var word in wordsToRemove)
+                {
+                    sentence.Items.Remove(word);
+                }
+                
+            }
+        }
+        
+        public void Change(string STR, int sentenceIndex, int targetLength)
+        {
+            if(sentenceIndex < 0 || sentenceIndex>Sentences.Count-1)
+            {
+                Console.WriteLine("Строки с таким номером не существует");
+                return;
+            }
+            Sentence sentence = Sentences[sentenceIndex];
+            foreach (Token item in sentence.Items)
+            {
+                if (item is Word word && word.Content.Length == targetLength) word.Content = STR;
+            }
+        }
+
+        public void RemoveStopWord(StreamReader sr) 
+        {
+            try
+            {
+                HashSet<string> uniqueStopWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                string line;
+                using (sr)
+                {
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        line = line.Trim();
+                        if (string.IsNullOrEmpty(line)) continue;
+
+                        uniqueStopWords.Add(line.ToLower());
+
+                    }   
+                foreach (Sentence sentence in Sentences)
+                        {
+                            foreach (Token token in sentence.Items)
+                            {
+                                sentence.Items.RemoveAll(token => token is Word word && uniqueStopWords.Contains(word.Content));
+                            }
+                        }    
+                }
+            }                                         
+            catch (Exception e) { Console.WriteLine($"Ошибка выполнения: {e}"); }
+        }
+
+
+
+
     }
 }

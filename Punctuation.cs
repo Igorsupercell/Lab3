@@ -8,12 +8,12 @@ namespace Lab3
     public  class Punctuation : Token
     {
         public Punctuation() : base(""){}
-        public override string ToString() => Сontent;
+        public override string ToString() => Content;
         public Punctuation(string punct) : base(punct)
         {
             if (!Allowed.Contains(punct)) throw new InvalidOperationException($"знак {punct},не входит в список допустимых");
         }
-        public static  readonly HashSet<string> Allowed = new() { ".", ",", "!", "?", "\'", "\"", "...", "?!", ";", ":", "[", "]", "{", "}", ")", "_", "(", "!!", "-"};
-        public static readonly HashSet<string> AllowedToendSentence = new() { ".","!", "?","...", "?!","!!"};
+        public static  readonly HashSet<string> Allowed = new() { ".", ",", "!", "?", "\'", "\"", "?!", ";", ":", "[", "]", "{", "}", ")", "_", "(", "!!", "-"};
+        public static readonly HashSet<string> AllowedToendSentence = new() { ".","!", "?", "?!","!!"};
     }
 }

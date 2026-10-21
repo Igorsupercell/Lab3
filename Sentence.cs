@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Linq;
 using System.Text;
 
 namespace Lab3
@@ -16,18 +15,26 @@ namespace Lab3
         }
         public override string ToString()
         {
-            string Result="";
+            
+            StringBuilder Result=new StringBuilder();
             Token[] Sent=Items.ToArray();
             for(int i=0; i<Sent.Length;i++)
-                if (Sent[i] is Word) 
+                if (Sent[i] is Word && i<0) 
                 {
-                    Result += ($"{Sent[i]} ");
+                    Result.Append($" {Sent[i]}");
                 }
                 else
                 {
-                    Result += (Sent[i]);
+                    Result.Append(Sent[i]);
                 }
-                return Result;
+                return Result.ToString();
         }
+
+        public int WordCount => Items.OfType<Word>().Count();
+
+        public int Length => ToString().Length;
+
+        public bool IsQuestion => Items.OfType<Punctuation>().Any(p => p.Content.Contains("?"));
+
     }
 }

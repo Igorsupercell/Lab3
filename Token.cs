@@ -7,11 +7,11 @@ namespace Lab3
 {
     public abstract class Token
     {
-        public string Сontent { get; set; }
+        public string Content { get; set; }
         public abstract override string ToString();
         protected Token(string content)
         {
-            Сontent = content;
+            Content = content;
         }
 
     }
