@@ -13,7 +13,7 @@ namespace Lab3
         {
             if (!Allowed.Contains(punct)) throw new InvalidOperationException($"знак {punct},не входит в список допустимых");
         }
-        public static  readonly HashSet<string> Allowed = new() { ".", ",", "!", "?", "\'", "\"", "...", "?!", ";", ":", "[", "]", "{", "}", ")", "_", "(", "!!", "-"," "};
+        public static  readonly HashSet<string> Allowed = new() { ".", ",", "!", "?", "\'", "\"", "...", "?!", ";", ":", "[", "]", "{", "}", ")", "_", "(", "!!", "-"};
         public static readonly HashSet<string> AllowedToendSentence = new() { ".","!", "?","...", "?!","!!"};
     }
 }

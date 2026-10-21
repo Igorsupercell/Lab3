@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Lab3
 {
-    internal class Sentence : Token
+    public class Sentence : Token
     {
         public List<Token> Items { get; set; } = new List<Token>();
         public Sentence(string content) : base(content){}

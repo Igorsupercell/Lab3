@@ -18,39 +18,57 @@ namespace Lab3
                 using (StreamReader sr = new StreamReader(InputFile))
                 using (StreamWriter sw = new StreamWriter(OutputFile))   
                 {
-                    string line;
+                    string line; 
+                    Text text= new Text(); 
+                    int j = 0;
                     while ((line=sr.ReadLine()) != null) 
                     {
                         line = line.Trim();
                         if (string.IsNullOrEmpty(line)) continue;
 
-                        Text text= new Text();
-                        int j = 0;
                         for (int i = 0; i < line.Length; i++)
                         {
-                            if (Punctuation.Allowed.Contains(line[i].ToString()))
+                            char CurrentChar = line[i];
+                            if (char.IsWhiteSpace(CurrentChar))
                             {
-                                PunctBuilder.Append(line[i].ToString());
+                                if (WordBuilder.Length>0)
+                                {   
+                                    text.Sentences[j].Add(new Word(WordBuilder.ToString()));
+                                    WordBuilder.Clear();
+                                }
+                                continue;
+                            }
 
-                                if (Punctuation.AllowedToendSentence.Contains(line[i].ToString()))
+
+                            if (Punctuation.Allowed.Contains(CurrentChar.ToString()))
+                            {
+                                if (WordBuilder.Length > 0)
                                 {
-                                    if (Punctuation.AllowedToendSentence.Contains(line[i + 1].ToString()))
+                                    text.Sentences[j].Add(new Word(WordBuilder.ToString()));
+                                    WordBuilder.Clear();
+                                }
+                                PunctBuilder.Append(CurrentChar.ToString());
+
+                                if (Punctuation.AllowedToendSentence.Contains(CurrentChar.ToString()))
+                                {
+                                    if (i+1<line.Length && Punctuation.AllowedToendSentence.Contains(line[i + 1].ToString()))
                                     {
                                         PunctBuilder.Append(line[i + 1]);
-                                        if (Punctuation.AllowedToendSentence.Contains(line[i + 2].ToString())) PunctBuilder.Append(line[i + 2].ToString());
+                                        i++;
+                                        if (i + 2 < line.Length && Punctuation.AllowedToendSentence.Contains(line[i + 2].ToString()))
+                                        { 
+                                            PunctBuilder.Append(line[i + 2].ToString());
+                                            i++;
+                                        }
                                     }
-                                    text.Sentences[j].Add(new Word(WordBuilder.ToString()));
                                     text.Sentences[j].Add(new Punctuation(PunctBuilder.ToString()));
-                                    WordBuilder.Clear();
                                     PunctBuilder.Clear();
                                     text.Add(new Sentence());
                                     j++;
                                 }
                                 else
-                                {
-                                    text.Sentences[j].Add(new Word(WordBuilder.ToString()));
+                                { 
                                     text.Sentences[j].Add(new Punctuation(PunctBuilder.ToString()));
-                                    WordBuilder.Clear();
                                     PunctBuilder.Clear(); 
                                 }
                             }
@@ -58,7 +76,14 @@ namespace Lab3
                             {
                                 WordBuilder.Append(line[i]);
                             }
-                                
+
+
+                            if (WordBuilder.Length > 0)
+                            {
+                                text.Sentences[j].Add(new Word(WordBuilder.ToString()));
+                                WordBuilder.Clear();
+                            }
+
                         }
 
                     }

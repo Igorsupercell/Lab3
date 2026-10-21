@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Lab3
 {
-    internal class Text 
+    public class Text 
     {
         public List<Sentence> Sentences { get; set; } = new List<Sentence>();
 

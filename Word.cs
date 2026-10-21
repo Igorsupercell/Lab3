@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Lab3
 {
-    internal class Word : Token 
+    public class Word : Token 
     {
         public Word(string content) : base(content){}
        
