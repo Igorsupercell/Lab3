@@ -6,7 +6,7 @@ namespace Lab3
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             string inputFile = "input.txt";
             string stopWordsFile = "stopwords_ru.txt";
@@ -42,7 +42,7 @@ namespace Lab3
                 Console.WriteLine("0. Выход");
                 Console.Write("Выберите пункт: ");
 
-                string choice = Console.ReadLine();
+                string? choice = Console.ReadLine();
                 Console.WriteLine();
 
                 switch (choice)

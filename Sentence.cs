@@ -10,8 +10,9 @@ namespace Lab3
         [XmlIgnore]
         public List<Token> Items { get; set; } = new List<Token>();
 
+
         [XmlIgnore]
-        public string Content { get; set; }
+        public new string Content { get; set; } = string.Empty;
         public Sentence() : base("") { }
 
         [XmlElement("word")]
