@@ -11,7 +11,7 @@ namespace Lab3
             StringBuilder WordBuilder = new StringBuilder();
             StringBuilder PunctBuilder = new StringBuilder();
 
-            string line;
+            string? line;
             Text text = new Text();
             int j = 0;
             while ((line = sr.ReadLine()) != null)

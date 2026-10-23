@@ -16,7 +16,7 @@ namespace Lab3
         } 
         public void Add(Sentence sent) { Sentences.Add(sent); }
 
-        public string ToString()
+        public override string ToString()
         {
             return string.Join(" ", Sentences.ToArray());
         }
@@ -117,7 +117,7 @@ namespace Lab3
             try
             {
                 HashSet<string> uniqueStopWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                string line;
+                string? line;
                 using (sr)
                 {
                     while ((line = sr.ReadLine()) != null)
